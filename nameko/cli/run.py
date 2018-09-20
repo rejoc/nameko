@@ -69,6 +69,9 @@ def import_service(module_name):
         # find top-level objects with entrypoints
         for _, potential_service in inspect.getmembers(module, is_type):
             if inspect.getmembers(potential_service, is_entrypoint):
+                # don't try to run a service if it's name is None
+                if hasattr(potential_service, 'name') and getattr(potential_service, 'name') is None:
+                    continue
                 found_services.append(potential_service)
 
         if not found_services:
